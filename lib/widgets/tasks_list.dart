@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc_todos/blocs/blocs.dart';
 import 'package:flutter_bloc_todos/models/task.dart';
+import './task_tile.dart';
 
 class TasksList extends StatelessWidget {
   const TasksList({
@@ -13,22 +13,39 @@ class TasksList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: ListView.builder(
-        itemCount: tasksList.length,
-        itemBuilder: (context, index) {
-          Task task = tasksList[index];
-          return ListTile(
-            title: Text(task.title),
-            trailing: Checkbox(
-              value: task.isDone,
-              onChanged: (value) {
-                context.read<TasksBloc>().add(UpdateTaskEvent(task: task));
-              },
-            ),
-            onLongPress: () {},
-          );
-        },
+      child: SingleChildScrollView(
+        child: ExpansionPanelList.radio(
+          children: tasksList
+              .map(
+                (task) => ExpansionPanelRadio(
+                  value: task.id,
+                  headerBuilder: (context, isExpanded) => TaskTile(task: task),
+                  body: ListTile(
+                    title: SelectableText.rich(TextSpan(children: [
+                      const TextSpan(
+                          text: 'Text:\n',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      TextSpan(text: task.title),
+                      const TextSpan(
+                          text: '\n\nDescription:\n',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      TextSpan(text: task.description),
+                    ])),
+                  ),
+                ),
+              )
+              .toList(),
+        ),
       ),
     );
   }
 }
+// Expanded(
+//       child: ListView.builder(
+//         itemCount: tasksList.length,
+//         itemBuilder: (context, index) {
+//           Task task = tasksList[index];
+//           return TaskTile(task: task);
+//         },
+//       ),
+//     );

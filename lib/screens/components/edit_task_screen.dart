@@ -3,12 +3,14 @@ import 'package:flutter_bloc_todos/blocs/blocs.dart';
 import 'package:flutter_bloc_todos/models/task.dart';
 import 'package:flutter_bloc_todos/services/guid_gen.dart';
 
-class AddTaskScreen extends StatelessWidget {
-  const AddTaskScreen({
+class EditTaskScreen extends StatelessWidget {
+  const EditTaskScreen({
     Key? key,
     required this.titleController,
     required this.descriptionController,
+    required this.oldTask,
   }) : super(key: key);
+  final Task oldTask;
   final TextEditingController titleController;
   final TextEditingController descriptionController;
 
@@ -63,7 +65,7 @@ class AddTaskScreen extends StatelessWidget {
                     context.read<TasksBloc>().add(AddTaskEvent(task: task));
                     Navigator.pop(context);
                   },
-                  child: const Text('Add')),
+                  child: const Text('Save')),
             ],
           )
         ],
